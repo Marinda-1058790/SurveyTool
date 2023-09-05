@@ -1,0 +1,49 @@
+.containerTableDatabaseQuestion {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    /* width: 500px; */
+    /* height: 200px; */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tableDatabaseQuestion {
+    width: 500px;
+    background-color: #e9f0f3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 40px;
+    box-shadow: 0px 0px 8px 4px rgba(92, 92, 92, 0.034);
+}
+
+.tableHeader {
+    text-align: center;
+}
+
+.tableBody {
+    padding: 10px 20px;
+    width: 500px;
+}
+.rowQuestion{
+    padding: 2px;
+    border-bottom: 1px solid rgb(223, 223, 223);
+}
+
+.rowQuestion:hover{
+    color: #008fde;
+}
+
+.rowQuestion {
+    cursor: pointer;
+}
+
+.sectionLine{
+    color: #858585 !important;
+    margin: 5px 0 !important;
+}

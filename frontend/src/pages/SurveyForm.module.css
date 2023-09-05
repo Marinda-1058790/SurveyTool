@@ -1,0 +1,9 @@
+.disabledIcon {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.chevronIcon {
+    font-size: 2em; 
+    cursor: pointer;
+  }

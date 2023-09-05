@@ -1,0 +1,5 @@
+flask
+Faker
+flask_bcrypt
+flask-jwt-extended
+flask-cors

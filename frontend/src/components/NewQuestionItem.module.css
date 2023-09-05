@@ -1,0 +1,69 @@
+.choiceBtn{
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    background-color: rgb(212, 215, 224);
+    flex: 1;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.choiceBtn.active{
+    background-color: #008fde;
+    color: white;
+}
+
+.choiceContainer{
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    min-width: 400px;
+}
+
+.newQuestionCard{
+    width: 400px;
+    background-color: white;
+    padding: 15px 25px;
+}
+
+.mainInput{
+    padding: 8px 12px;
+    width: 100%;
+}
+
+.subInputs{
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-left: 10px;
+}
+
+.subInputs>input{
+    padding: 4px 6px;
+    font-size: 14px;
+}
+
+.saveBtn{
+    padding: 8px 16px;
+    background-color: rgb(20, 161, 20);
+    border: 1px solid transparent;
+    color: white;
+    margin-top: 8px;
+}
+
+.saveBtn:hover, .choiceBtn:hover{
+    box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.075);
+}
+
+.inputLabel{
+    font-size: 15px;
+    margin: 0;
+    color: rgb(97, 97, 97);
+}
+
+.addBtn{
+    padding: 4px 8px;
+    background-color: #008fde;
+    border: 1px solid transparent;
+    color: white;
+}

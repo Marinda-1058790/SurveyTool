@@ -1,0 +1,161 @@
+.divSurveyTitle {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.surveyTitleInput {
+    width: 700px;
+    padding: 8px 20px;
+    font-size: 23px;
+    /* text-align: center; */
+    border: 1px solid transparent;
+    background-color: rgb(255, 255, 255);
+    border-bottom: 1px solid lightgrey;
+}
+
+.divQuestion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.btnContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.btnSaveNewSurvey {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+}
+
+.toggleAnonymous {
+    font-size: 36px;
+    transition: 0.2s;
+}
+
+.toggleAnonymous:hover{
+    cursor: pointer;
+    scale: 1.2;
+}
+
+.divAddNewQuestion {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.btnAddNewQuestion {
+    width: 50px;
+    margin-bottom: 10px;
+}
+
+.newQuestionContainer{
+    display: flex;
+    background-color: white;
+    /* padding: 10px; */
+    gap: 20px;
+}
+
+.newQuestionContent{
+    padding: 9px 20px;
+}
+
+.addButton{
+    width: 95px;
+    border: 1px solid transparent;
+    background-color: #46ad10;
+    color: white;
+    transition: 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addButton.cancelButton{
+    transition: 0.2s;
+    background-color: rgb(201, 17, 17);
+}
+
+.plusIcon{
+    transition: 0.2s;
+}
+
+.addButton.cancelButton > i{
+    transition: 0.2s;
+    rotate: 45deg;
+
+}
+
+.addButton:hover, .choiceBtn:hover{
+    box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.075);
+    cursor: pointer;
+}
+
+.choiceBtn{
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    background-color: rgb(212, 215, 224);
+    flex: 1;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.choiceBtn.active{
+    background-color: #008fde;
+    color: white;
+}
+
+.btnRow{
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+.submitBtn{
+    padding: 8px 20px;
+    border: 1px solid transparent;
+    background-color: #008fde;
+    color: white;
+    transition: 0.2s;
+    position: relative;
+    width: 120px;
+    height: 50px;
+}
+
+.submitBtn:hover{
+    background-color: #46ad10;
+    cursor: pointer;
+    scale: 1.1;
+
+
+}
+.submitBtn>i{
+    font-size: 20px;
+}
+
+.submitBtn>i,.submitBtn>span{
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translate(50%,-50%);
+    transition: 0.2s;
+    
+}
+
+.submitBtn:hover > i{
+    opacity: 1 !important;
+}
+
+.submitBtn:hover > span{
+    opacity: 0 !important;
+}

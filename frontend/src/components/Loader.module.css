@@ -1,0 +1,79 @@
+.container {
+    height: 20vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+@keyframes audio-wave {
+    0% {
+        height: 10px;
+        transform: translateY(0px);
+        background: #2fa21a;
+    }
+
+    25% {
+        height: 40px;
+        transform: translateY(-5px);
+        scaleY: 1.7;
+        background: #0e9166;
+    }
+
+    50% {
+        height: 10px;
+        transform: translateY(0px);
+        scaleY: 1.7;
+        background: #0871a6;
+    }
+
+    100% {
+        height: 10px;
+        transform: translateY(0px);
+        scaleY: 1.7;
+        background: #1157c4;
+    }
+}
+
+.soundWave {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    height: 60px
+}
+
+.soundWave span {
+    height: 18px;
+    width: 10px;
+    display: block;
+    border-radius: 8px;
+    background: #008fde;
+    animation: audio-wave 2.2s infinite ease-in-out
+}
+
+.soundWave span:nth-child(2) {
+    left: 11px;
+    background: #77ff5f;
+    animation-delay: 0.2s
+}
+
+.soundWave span:nth-child(3) {
+    left: 22px;
+    animation-delay: 0.4s
+}
+
+.soundWave span:nth-child(4) {
+    left: 33px;
+    animation-delay: 0.6s
+}
+
+.soundWave span:nth-child(5) {
+    left: 44px;
+    animation-delay: 0.8s
+}
+
+.soundWave span:nth-child(6) {
+    left: 55px;
+    animation-delay: 1s
+}

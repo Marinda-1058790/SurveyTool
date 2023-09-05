@@ -1,0 +1,91 @@
+.newQuestionContainer {
+    display: flex;
+    background-color: white;
+    /* padding: 10px; */
+    gap: 20px;
+}
+
+.addButton {
+    padding: 9px;
+    width: 80px;
+    border: 1px solid transparent;
+    background-color: #46ad10;
+    color: white;
+    transition: 0.2s;
+}
+
+.addButton.cancelButton {
+    transition: 0.2s;
+    background-color: rgb(201, 17, 17);
+}
+
+.btnSaveNewSurvey {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+}
+
+.submitBtn {
+    padding: 8px 20px;
+    border: 1px solid transparent;
+    background-color: #008fde;
+    color: white;
+    transition: 0.2s;
+    position: relative;
+    width: 120px;
+    height: 50px;
+}
+
+.submitBtn:hover {
+    background-color: #46ad10;
+    cursor: pointer;
+    scale: 1.1;
+
+
+}
+
+.submitBtn>i {
+    font-size: 20px;
+}
+
+.submitBtn>i,
+.submitBtn>span {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translate(50%, -50%);
+    transition: 0.2s;
+
+}
+
+.submitBtn:hover>i {
+    opacity: 1 !important;
+}
+
+.submitBtn:hover>span {
+    opacity: 0 !important;
+}
+
+.plusIcon {
+    transition: 0.2s;
+}
+
+.addButton.cancelButton>i {
+    transition: 0.2s;
+    rotate: 45deg;
+
+}
+
+.addButton:hover {
+    box-shadow: inset 0 0 0 100px rgba(0, 0, 0, 0.075);
+}
+
+.newQuestionContent {
+    padding: 9px 20px;
+}
+
+.newQuestionContent>p {
+    margin: 0;
+}
