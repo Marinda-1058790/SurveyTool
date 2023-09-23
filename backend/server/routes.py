@@ -158,7 +158,7 @@ def authenticate():
 @jwt_required()
 def edit_question(id=None):
     question = request.json["question"]
-    query_model.commit_query(f"UPDATE question SET question_text = '{question}' WHERE question_id = '{id}'")
+    query_model.commit_query(f"UPDATE question SET question_text = %s WHERE question_id = %s", +(question, id))
     return jsonify("function_ended")
 
 @app.route('/question/delete/<id>', methods=["DELETE"])
@@ -235,7 +235,9 @@ def change_sequence(id=None):
     data = request.get_json()
     print(data)
     for item in data:
-        query_model.commit_query(f"UPDATE question SET sequence = '{item['new_sequence']}' WHERE question_id = '{item['question_id']}'")
+        new_sequence = item['new_sequence']
+        question_id = item['question_id']
+        query_model.commit_query(f"UPDATE question SET sequence = %s WHERE question_id = %s", +(new_sequence, question_id))
    
     return {
         "status": "ok"
@@ -247,10 +249,11 @@ def update_sequence(id=None):
     data = request.get_json()
     print(data)
     deleted_sequence = data['deleted_sequence']
-    need_update = query_model.execute_query(f"SELECT * FROM question WHERE survey_id = {id} AND sequence > {deleted_sequence}")
+    need_update = query_model.execute_query(f"SELECT * FROM question WHERE survey_id = %s AND sequence > %s", +(id, deleted_sequence))
 
     for item in need_update:
-        query_model.commit_query(f"UPDATE question SET sequence = '{(item['sequence']-1)}' WHERE question_id = '{item['question_id']}'")
+        
+        query_model.commit_query(f"UPDATE question SET sequence = %s WHERE question_id = %s",+(item['sequence']-1, item['question_id']))
     return {
         "status": "ok"
     }
@@ -294,7 +297,7 @@ def submit_survey():
     data = request.get_json()
 
     survey_id = data.get('survey_id')
-    survey_info = query_model.execute_query_by_id(f"SELECT * FROM survey WHERE survey_id = {survey_id}")
+    survey_info = query_model.execute_query_by_id(f"SELECT * FROM survey WHERE survey_id = %s", +(survey_id))
 
     if survey_info["anonymous"]:
         user_id = None
@@ -305,7 +308,7 @@ def submit_survey():
 
     try:
         for answer in answers:
-            query_model.commit_query(f"INSERT INTO answer (question_id, user_id, answer) VALUES ('{answer['question_id']}', '{user_id}', '{answer['answer']}')")
+            query_model.commit_query(f"INSERT INTO answer (question_id, user_id, answer) VALUES (%s, %s, %s)", +(answer['question_id'], user_id, answer['answer']))
 
     except Exception as e:
         return jsonify({"message": str(e)}), 500
