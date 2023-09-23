@@ -109,7 +109,7 @@ def create_token():
     password = request.json.get("password", None)
 
     # get user by email
-    result = query_model.execute_query_by_id(f"SELECT * FROM user WHERE email = '{email}'")
+    result = query_model.execute_query_by_id(f"SELECT * FROM user WHERE email = %s", +(email))
 
     if result:
         # creates a token binded to the email
