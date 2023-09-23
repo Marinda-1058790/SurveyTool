@@ -11,6 +11,8 @@ from query_model import QueryModel
 query_model = QueryModel('database/database.db')
 
 # Route for getting all surveys
+
+
 @app.route('/surveys', methods=['GET'])
 @jwt_required()
 def get_surveys():
@@ -20,6 +22,7 @@ def get_surveys():
                     for survey in surveys]
 
     return jsonify(surveys_list)
+
 
 @app.route('/save_new_survey', methods=['POST'])
 @jwt_required()
@@ -34,39 +37,44 @@ def save_new_survey():
     }
 
 
-
 # Route for getting questions and title by survey id
 @app.route('/survey/data/<id>', methods=['GET'])
 @jwt_required()
 def get_questions_for_survey(id=None):
     print(current_user)
     # Fetch survey name
-    survey = query_model.execute_query_by_id(f"SELECT name, anonymous FROM survey WHERE survey_id = {id}")
+    survey = query_model.execute_query_by_id(
+        f"SELECT name, anonymous FROM survey WHERE survey_id = {id}")
     survey_name = survey['name']
     # Fetch all questions with survey_id
-    data = query_model.execute_query(f"SELECT * FROM question WHERE survey_id = {id} ORDER BY sequence")
+    data = query_model.execute_query(
+        f"SELECT * FROM question WHERE survey_id = {id} ORDER BY sequence")
     questions = []
     for question in data:
-        item = query_model.execute_query_by_id(f"SELECT * FROM question_collection WHERE question_collection_id = {question['question_collection_id']}")
-        answers_data = query_model.execute_query(f"SELECT * FROM answer WHERE question_id = {question['question_id']}")
-        # Check if the question is multiple choice 
-        if item['type'] != None and item['type'] != "" :
+        item = query_model.execute_query_by_id(
+            f"SELECT * FROM question_collection WHERE question_collection_id = {question['question_collection_id']}")
+        answers_data = query_model.execute_query(
+            f"SELECT * FROM answer WHERE question_id = {question['question_id']}")
+        # Check if the question is multiple choice
+        if item['type'] != None and item['type'] != "":
             if item['type'] == 1:
                 choices = []
-                choices_data = query_model.execute_query(f"SELECT * FROM multiple_choice WHERE question_collection_id = {question['question_collection_id']}")
+                choices_data = query_model.execute_query(
+                    f"SELECT * FROM multiple_choice WHERE question_collection_id = {question['question_collection_id']}")
                 for choice in choices_data:
                     choices.append({
-                    'multiple_choice_id': choice['multiple_choice_id'],
-                    'number': choice['number'],
-                    'answer': choice['answer'],
-                    'question_collection_id': choice['question_collection_id']})
+                        'multiple_choice_id': choice['multiple_choice_id'],
+                        'number': choice['number'],
+                        'answer': choice['answer'],
+                        'question_collection_id': choice['question_collection_id']})
             else:
                 choices = None
 
             answers = []
             for answer in answers_data:
-                if  not survey['anonymous']:
-                    user_item = query_model.execute_query_by_id(f"SELECT user_id, email, first_name, last_name FROM user WHERE user_id = {answer['user_id']}")
+                if not survey['anonymous']:
+                    user_item = query_model.execute_query_by_id(
+                        f"SELECT user_id, email, first_name, last_name FROM user WHERE user_id = {answer['user_id']}")
                     user = {
                         "user_id": user_item['user_id'],
                         "email": user_item['email'],
@@ -98,7 +106,7 @@ def get_questions_for_survey(id=None):
                 'choices': choices
             })
 
-    return jsonify({ 'questions': questions, 
+    return jsonify({'questions': questions,
                     'name': survey_name})
 
 
@@ -109,7 +117,9 @@ def create_token():
     password = request.json.get("password", None)
 
     # get user by email
-    result = query_model.execute_query_by_id(f"SELECT * FROM user WHERE email = %s", +(email))
+    print("SELECT * FROM user WHERE email = '%s'" % email)
+    result = query_model.execute_query_by_id(
+        "SELECT * FROM user WHERE email = '%s'" % email)
 
     if result:
         # creates a token binded to the email
@@ -137,8 +147,9 @@ def create_token():
 @jwt.user_lookup_loader
 def user_lookup_callback(_jwt_header, jwt_data):
     identity = jwt_data["sub"]
-    result = query_model.execute_query_by_id(f"SELECT * FROM user WHERE email = '{identity}'")
-    
+    result = query_model.execute_query_by_id(
+        f"SELECT * FROM user WHERE email = '{identity}'")
+
     return {
         "firstName": result['first_name'],
         "lastName": result['last_name'],
@@ -149,22 +160,28 @@ def user_lookup_callback(_jwt_header, jwt_data):
     }
 
 # used for sending user data by jwt token to frontend
+
+
 @app.route('/who_am_i', methods=["GET"])
 @jwt_required()
 def authenticate():
     return jsonify(current_user)
 
+
 @app.route('/question/edit/<id>', methods=["POST"])
 @jwt_required()
 def edit_question(id=None):
     question = request.json["question"]
-    query_model.commit_query(f"UPDATE question SET question_text = %s WHERE question_id = %s", +(question, id))
+    query_model.commit_query(
+        f"UPDATE question SET question_text = %s WHERE question_id = %s", +(question, id))
     return jsonify("function_ended")
+
 
 @app.route('/question/delete/<id>', methods=["DELETE"])
 @jwt_required()
 def delete_question(id=None):
-    query_model.commit_query(f"DELETE FROM question WHERE question_id = '{id}'")
+    query_model.commit_query(
+        f"DELETE FROM question WHERE question_id = '{id}'")
     return jsonify("function_ended")
 
 
@@ -179,7 +196,7 @@ def all_questions():
                 "id": question[0],
                 "question": question[1],
                 "type": question[3]
-                })
+            })
         if question[3] == True:
             options = query_model.get_mc_options_by_id(question[0])
             option_array = []
@@ -190,7 +207,7 @@ def all_questions():
                 "question": question[1],
                 "type": question[3],
                 "options": option_array
-                })
+            })
     return question_array
 
 
@@ -204,6 +221,7 @@ def save_open_question_to_db():
         "status": "ok"
     }
 
+
 @app.route('/save_mc_question_to_db', methods=["POST"])
 @jwt_required()
 def save_mc_question_to_db():
@@ -215,19 +233,22 @@ def save_mc_question_to_db():
         "status": "ok"
     }
 
+
 @app.route('/survey/surveyStats/<id>', methods=["GET"])
 @jwt_required()
 def survey_stats(id=None):
 
-    amountQuestion = len(query_model.execute_query(f"SELECT question_id FROM question WHERE survey_id = '{id}'"))
-    
+    amountQuestion = len(query_model.execute_query(
+        f"SELECT question_id FROM question WHERE survey_id = '{id}'"))
 
     # check diffent users for answers of each survey
-    amountAnswer = len(query_model.execute_query(f"SELECT DISTINCT answer.user_id, question.survey_id  FROM question NATURAL JOIN answer WHERE survey_id = '{id}'"))
+    amountAnswer = len(query_model.execute_query(
+        f"SELECT DISTINCT answer.user_id, question.survey_id  FROM question NATURAL JOIN answer WHERE survey_id = '{id}'"))
     return {
         "answerCount": amountAnswer,
         "questionCount": amountQuestion
     }
+
 
 @app.route('/survey/changeSequence/<id>', methods=["POST"])
 @jwt_required()
@@ -237,11 +258,13 @@ def change_sequence(id=None):
     for item in data:
         new_sequence = item['new_sequence']
         question_id = item['question_id']
-        query_model.commit_query(f"UPDATE question SET sequence = %s WHERE question_id = %s", +(new_sequence, question_id))
-   
+        query_model.commit_query(
+            f"UPDATE question SET sequence = %s WHERE question_id = %s", +(new_sequence, question_id))
+
     return {
         "status": "ok"
     }
+
 
 @app.route('/survey/updateSequence/<id>', methods=["POST"])
 @jwt_required()
@@ -249,14 +272,17 @@ def update_sequence(id=None):
     data = request.get_json()
     print(data)
     deleted_sequence = data['deleted_sequence']
-    need_update = query_model.execute_query(f"SELECT * FROM question WHERE survey_id = %s AND sequence > %s", +(id, deleted_sequence))
+    need_update = query_model.execute_query(
+        f"SELECT * FROM question WHERE survey_id = %s AND sequence > %s", +(id, deleted_sequence))
 
     for item in need_update:
-        
-        query_model.commit_query(f"UPDATE question SET sequence = %s WHERE question_id = %s",+(item['sequence']-1, item['question_id']))
+
+        query_model.commit_query(
+            f"UPDATE question SET sequence = %s WHERE question_id = %s", +(item['sequence']-1, item['question_id']))
     return {
         "status": "ok"
     }
+
 
 @app.route('/add_open_question_to_survey/<id>', methods=["POST"])
 @jwt_required()
@@ -268,6 +294,7 @@ def add_open_question_to_survey(id=None):
     return {
         "status": "ok"
     }
+
 
 @app.route('/add_mc_question_to_survey/<id>', methods=["POST"])
 @jwt_required()
@@ -281,6 +308,7 @@ def add_mc_question_to_survey(id=None):
         "status": "ok"
     }
 
+
 @app.route('/question/multiplechoice/edit', methods=["POST"])
 @jwt_required()
 def update_mc():
@@ -291,35 +319,39 @@ def update_mc():
         "status": "ok"
     }
 
+
 @app.route('/survey/submit', methods=['POST'])
 @jwt_required()
 def submit_survey():
     data = request.get_json()
 
     survey_id = data.get('survey_id')
-    survey_info = query_model.execute_query_by_id(f"SELECT * FROM survey WHERE survey_id = %s", +(survey_id))
+    survey_info = query_model.execute_query_by_id(
+        f"SELECT * FROM survey WHERE survey_id = %s", +(survey_id))
 
     if survey_info["anonymous"]:
         user_id = None
     else:
-        user_id = current_user['user_id']  
+        user_id = current_user['user_id']
 
     answers = data.get('answers', [])
 
     try:
         for answer in answers:
-            query_model.commit_query(f"INSERT INTO answer (question_id, user_id, answer) VALUES (%s, %s, %s)", +(answer['question_id'], user_id, answer['answer']))
+            query_model.commit_query(f"INSERT INTO answer (question_id, user_id, answer) VALUES (%s, %s, %s)", +(
+                answer['question_id'], user_id, answer['answer']))
 
     except Exception as e:
         return jsonify({"message": str(e)}), 500
 
     return jsonify({"message": "Successfully submitted survey"}), 200
 
+
 @app.route('/check_admin', methods=["GET"])
 @jwt_required()
 def check_admin():
     print(current_user)
-    if current_user['admin']== True:
+    if current_user['admin'] == True:
         return {
             "admin": True
         }
@@ -327,4 +359,3 @@ def check_admin():
         return {
             "admin": False
         }
-
