@@ -162,7 +162,7 @@ class QueryModel:
         conn.commit()
 
         query = f'''INSERT INTO question(question_text, survey_id, question_collection_id, sequence)
-                            VALUES(%s, %s, %s, %s)''', +(question, id, question_collection['question_collection_id'], sequence)
+                            VALUES(%s, %s, %s, %s)''' % (question, id, question_collection['question_collection_id'], sequence)
         cursor.execute(query)
         conn.commit()
         
