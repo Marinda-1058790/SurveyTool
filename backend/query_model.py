@@ -63,7 +63,7 @@ class QueryModel:
         counter = 1
         for option in options:
             fill_multiple_choice_options = f'''INSERT INTO multiple_choice(number, answer, question_collection_id)
-                                                                        VALUES ({counter}, "{option}", "{id_query[0][0]}")'''
+                                                                        VALUES (%s, %s, %s)''', +(counter, option, id_query[0][0])
             counter +=1
             self.execute_update(fill_multiple_choice_options)
         return "Question is saved"
@@ -97,7 +97,7 @@ class QueryModel:
                 question_id = self.execute_query('''SELECT max (question_collection_id) FROM question_collection''')
 
                 query = f'''INSERT INTO question(question_collection_id, question_text, sequence, survey_id)
-                                    VALUES ({question_id[0][0]}, "{q}", {count}, {survey_id[0][0]})'''
+                                    VALUES (%s, %s, %s, %s)''', +(question_id[0][0], q, count, survey_id[0][0])
                 count+=1
                 self.execute_update(query)
             elif question ["type"] ==  "multiple choice" and check == 0:
@@ -106,14 +106,14 @@ class QueryModel:
                 self.execute_update(query)
                 question_id = self.execute_query('''SELECT max (question_collection_id) FROM question_collection''')
                 query = f'''INSERT INTO question(question_collection_id, question_text, sequence, survey_id)
-                                    VALUES ({question_id[0][0]}, "{q}", {count}, {survey_id[0][0]})'''
+                                    VALUES (%s, %s, %s, %s)''', +(question_id[0][0], q, count, survey_id[0][0])
                 self.execute_update(query)
                 count +=1
                 option_counter = 1
                 # Inserts options in db
                 for option in question["options"]:
                     query = f'''INSERT INTO multiple_choice(number, answer, question_collection_id)
-                                                                                VALUES ({option_counter}, "{option}", "{question_id[0][0]}")'''
+                                                                                VALUES (%s, %s, %s)''', +(option_counter, option, question_id[0][0])
                     option_counter +=1
                     self.execute_update(query)
             # If question does exist in db add it to survey
@@ -122,7 +122,7 @@ class QueryModel:
                                 WHERE question_text = "{q}"'''
                 question_id = self.execute_query(query)
                 query = f'''INSERT INTO question(question_collection_id, question_text, sequence, survey_id)
-                                    VALUES ({question_id[0][0]}, "{q}", {count}, {survey_id[0][0]})'''
+                                    VALUES (%s, %s, %s, %s)''', +(question_id[0][0], q, count, survey_id[0][0])
                 count +=1
                 self.execute_update(query)
             
@@ -142,7 +142,7 @@ class QueryModel:
         print(item)
         conn.commit()
         query = f'''INSERT INTO question(question_text, survey_id, question_collection_id, sequence)
-                            VALUES("{question}", {id}, {question_collection['question_collection_id']}, {sequence})'''
+                            VALUES(%s, %s, %s, %s)''', +(question, id, question_collection['question_collection_id'], sequence)
         cursor.execute(query)
         conn.commit()
         return item
@@ -162,7 +162,7 @@ class QueryModel:
         conn.commit()
 
         query = f'''INSERT INTO question(question_text, survey_id, question_collection_id, sequence)
-                            VALUES("{question}", {id}, {question_collection['question_collection_id']}, {sequence})'''
+                            VALUES(%s, %s, %s, %s)''', +(question, id, question_collection['question_collection_id'], sequence)
         cursor.execute(query)
         conn.commit()
         

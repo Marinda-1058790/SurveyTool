@@ -164,7 +164,7 @@ def db_fill_multiple_choice():
 
             for item in text[i][1]:
                 sql_fill_multiple_choice_query = f'''INSERT INTO multiple_choice(number, answer, question_collection_id)
-                                                                        VALUES ("{item[0]}", "{item[1]}", "{id_query[0][0]}")'''
+                                                                        VALUES (%s, %s, %s)''', +(item[0], item[1],id_query[0][0])
                 query_model.execute_update(sql_fill_multiple_choice_query)
 
             i = i+1
